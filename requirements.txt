@@ -1,0 +1,2 @@
+# Runtime and test lane (.venv): what the tests and the guards need. Pinned to the verified install (Python 3.12).
+numpy==2.4.6

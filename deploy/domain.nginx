@@ -1,0 +1,32 @@
+# Static hosting on the ml box (the fallback target when the export exceeds the Pages limits).
+# Install as /etc/nginx/sites-available/destello.ml.fasl-work.com, link into sites-enabled, then
+# `certbot --nginx -d destello.ml.fasl-work.com` and `nginx -t && systemctl reload nginx`.
+server {
+    listen 80;
+    server_name destello.ml.fasl-work.com;
+    root /var/www/destello.ml.fasl-work.com;
+
+    # Keep the standard MIME table: a server-level `types` block would replace it, not extend it.
+    include /etc/nginx/mime.types;
+    types { application/wasm wasm; model/gltf-binary glb; }
+
+    gzip on;
+    gzip_types application/json application/javascript text/css image/svg+xml application/wasm;
+
+    # Artifacts are content-addressed by the manifest: cache them hard, and answer 404 for a missing one
+    # (never fall back to index.html, which would hand the browser HTML where it expects binary data).
+    location /data/ {
+        add_header Cache-Control "public, max-age=31536000, immutable";
+        try_files $uri =404;
+    }
+
+    # The page shell must revalidate so a release is seen at once.
+    location = /index.html {
+        add_header Cache-Control "no-cache";
+    }
+
+    # Client-side routes of the single-page app.
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}

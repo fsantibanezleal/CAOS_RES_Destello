@@ -1,0 +1,57 @@
+name: ci
+
+# Cheap checks on committed files only: no test suite, no training stack, no simulation, no bake. The full test
+# suite and the canonical bake run locally. Trunk plus manual triggers only; superseded runs are cancelled.
+on:
+  push:
+    branches: [develop, main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Lint
+        run: pip install ruff==0.15.18 && ruff check data-pipeline tests scripts app
+
+  guards:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Base-integrity guards
+        run: |
+          fail=0
+          if git ls-files | grep -qE '(^|/)\.env(\..+)?$' && ! git ls-files | grep -qx '.env.example'; then
+            echo "::error::a real .env is tracked (only .env.example may be)"; fail=1; fi
+          if git ls-files | grep -qiE '(^|/)\.?venv|\.(dll|so|dylib|pt|pth)$'; then
+            echo "::error::a venv or a native or heavy binary is tracked"; fail=1; fi
+          if git ls-files | grep -qiE '\.(parquet|h5|hdf5|nc|mat|npy|feather|swc)$'; then
+            echo "::error::raw or heavy data tracked; commit only compact derived artifacts"; fail=1; fi
+          if git grep -nF 'D:\_Repos' -- . ':!.github' >/dev/null 2>&1; then
+            echo "::error::leaked local machine path in a tracked file"; fail=1; fi
+          if [ "$fail" -eq 0 ]; then echo "guards: OK"; fi
+          exit $fail
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: No template residue
+        run: python scripts/check_template_residue.py
+      - name: No em-dash or emoji
+        run: python scripts/check_content_standards.py
+      - name: CI budget
+        run: python scripts/check_ci_budget.py
+      - name: The design document, every requirement names a gate that exists
+        run: python scripts/check_sdd.py
