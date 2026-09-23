@@ -1,0 +1,3 @@
+# The offline lane (.venv-pipeline, local only, never in CI or deploy). Each engine pinned here is documented in
+# docs/frameworks/ and called by the pipeline; entries are added by the unit that starts using them.
+-r data-pipeline/requirements.txt

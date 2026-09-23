@@ -1,0 +1,4 @@
+# Offline pipeline engines, pinned to the verified install (Python 3.12). Added by the unit that uses each one.
+numpy==2.4.6
+pyarrow==25.0.0
+pandas==3.0.5
