@@ -1,0 +1,18 @@
+# Repository tool configuration only. Destello declares no package of its own: the pipeline is plain scripts run by
+# path (python data-pipeline/run.py), and the simulation engine is the separately published flycns.
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+markers = [
+    "data: needs the release files on disk (skipped when absent; -rs lists every skip)",
+    "gpu: needs a CUDA device",
+]
+
+[tool.ruff]
+line-length = 110
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501"]
