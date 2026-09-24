@@ -10,8 +10,8 @@ every metric.
 
 ## The renderer: analytic ray casting on the fly's own eyes
 
-Scenes are built from primitives whose intersection with a ray has a closed form: spheres, planes (bounded or
-not), and the inside of a cylinder or sphere around the fly (panoramic backgrounds). Each primitive carries a pattern
+Scenes are built from primitives whose intersection with a ray has a closed form: spheres, ellipsoids (the rival
+fly), planes (bounded or not), and vertical cylinders (tree trunks, and seen from inside, panoramic backgrounds). Each primitive carries a pattern
 (uniform, sinusoidal grating, square wave, a seeded 1/f texture) that maps the hit point to a luminance in [0, 1].
 The fly's head is at the origin of the body frame (x forward, y left, z up, the frame of `flycns.eyes`); its pose
 over time (position and heading) is part of the case. Objects move on stated trajectories.
@@ -37,7 +37,8 @@ lattice columns' directions, which `flycns.mapped` places in each eye's local fr
 
 **V8's input.** The monocular depth reference sees a full-resolution image: each eye's view rendered as a
 518 x 518 azimuthal-equidistant image around the eye's centre direction, 180 degrees wide, with its depth, at a
-subset of frames. It is labelled as not the fly.
+subset of frames. It is labelled as not the fly. Those images are made by the readout unit (V8), with this
+renderer, not by the dataset stage.
 
 ## The cases
 
@@ -71,5 +72,6 @@ id. No layout or seed reaches two splits.
 ## Output
 
 One directory per case and variant in the compiled style (a manifest with the SHA-256 of every array): intensity per
-frame and column for both eyes (float16), E3's lattice intensities (frames x 2 x 721), the truth (depth, object id,
-optic flow, time to contact), the case's parameters, seed, layout and split. A case index lists every variant.
+frame and column for both eyes (uint16, luminance times 65535: the compiled format has no float16), E3's lattice
+intensities (frames x 2 x 721), the truth (depth, object id, optic flow, time to contact), the case's parameters,
+seed, layout and split. A case index lists every variant.
