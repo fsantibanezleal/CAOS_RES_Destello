@@ -26,7 +26,9 @@ from the literature, labelled as such.
 
 ## Status
 
-Version 0.00.000: the design (`docs/design/SDD.md`) and the scaffold. The simulation engine lives in its own package,
+Version 0.01.000: the design (`docs/design/SDD.md`), the scaffold, and the visual world: an analytic renderer of
+what each ommatidium of both eyes sees, with the exact truth (depth, object, optic flow, time to contact), and the
+13 cases and 222 stimuli of the product. The simulation engine lives in its own package,
 [`flycns`](https://github.com/fsantibanezleal/CAOS_FlyCNS). This README lists capabilities only as they land.
 
 ## Layout
