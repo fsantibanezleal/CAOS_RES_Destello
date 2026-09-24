@@ -2,3 +2,5 @@
 numpy==2.4.6
 pyarrow==25.0.0
 pandas==3.0.5
+# the simulation engine, a separate package (CAOS_FlyCNS), pinned by its release tag until it is on PyPI
+flycns @ git+https://github.com/fsantibanezleal/CAOS_FlyCNS@v0.06.000
