@@ -47,7 +47,7 @@ Destello answers three questions, and shows the answer happening:
 | Component | Where | Role |
 |---|---|---|
 | `flycns` (Python) | separate repository `CAOS_FlyCNS`, published on PyPI | compiles MaleCNS into a signed graph with positions and per-eye columns; eye model; graded and spiking dynamics; recorder |
-| `@fasl-work/flycns` (TypeScript/WGSL) | same repository, published on npm | the same dynamics in the browser (WebGPU compute, WASM fallback), loaders for the compiled graph |
+| `@fasl-work/flycns` (TypeScript/WGSL) | same repository, published on npm | the same dynamics in the browser (WebGPU compute; a CPU engine in a worker where there is no WebGPU), loaders for the compiled graph and engine bundles |
 | pipeline | `data-pipeline/` here, plain scripts run by path | ingest, preprocess, cases and splits, simulate, readouts, train, infer, evaluate, export, validate |
 | web | `frontend/` here | six pages on the shared shell; the App workbench; the focus route; the architecture modal |
 | wiki | `docs/` here | theory, equations, references, diagrams, guides, the data contract |

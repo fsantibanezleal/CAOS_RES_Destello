@@ -3,6 +3,14 @@
 All notable changes, newest first, grouped Added / Changed / Fixed / Removed. Versions are `X.XX.XXX` (the `VERSION`
 file, the tags and this log); manifests carry the semantic form.
 
+## [0.01.001] - 2026-09-26
+
+### Changed
+
+- The pipeline consumes the engine from PyPI (`flycns==0.7.0`) instead of a git tag, now that flycns is published;
+  the tests pass against the published package.
+- The design names the browser fallback as it was built: a CPU engine in a worker, not WebAssembly.
+
 ## [0.01.000] - 2026-09-24
 
 ### Added
